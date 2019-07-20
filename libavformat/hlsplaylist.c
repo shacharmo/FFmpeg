@@ -80,7 +80,7 @@ void ff_hls_write_playlist_header(AVIOContext *out, int version, int allowcache,
     if (allowcache == 0 || allowcache == 1) {
         avio_printf(out, "#EXT-X-ALLOW-CACHE:%s\n", allowcache == 0 ? "NO" : "YES");
     }
-    avio_printf(out, "#EXT-X-TARGETDURATION:%d\n", target_duration);
+    avio_printf(out, "#EXT-X-TARGETDURATION:%f\n", target_duration);
     avio_printf(out, "#EXT-X-MEDIA-SEQUENCE:%"PRId64"\n", sequence);
     av_log(NULL, AV_LOG_VERBOSE, "EXT-X-MEDIA-SEQUENCE:%"PRId64"\n", sequence);
 
