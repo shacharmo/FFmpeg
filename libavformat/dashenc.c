@@ -102,6 +102,7 @@ typedef struct DASHContext {
     int nb_as;
     int window_size;
     int extra_window_size;
+    float minimal_target_duration;
 #if FF_API_DASH_MIN_SEG_DURATION
     int min_seg_duration;
 #endif
@@ -468,7 +469,7 @@ static void output_segment_list(OutputStream *os, AVIOContext *out, AVFormatCont
         char temp_filename_hls[1024];
         char filename_hls[1024];
         AVDictionary *http_opts = NULL;
-        int target_duration = 0;
+        float target_duration = c->minimal_target_duration;
         int ret = 0;
         const char *proto = avio_find_protocol_name(c->dirname);
         int use_rename = proto && !strcmp(proto, "file");
@@ -485,7 +486,7 @@ static void output_segment_list(OutputStream *os, AVIOContext *out, AVFormatCont
             Segment *seg = os->segments[i];
             double duration = (double) seg->duration / timescale;
             if (target_duration <= duration)
-                target_duration = lrint(duration);
+                target_duration = (float)duration;
         }
 
         ff_hls_write_playlist_header(c->m3u8_out, 6, -1, target_duration,
@@ -1573,6 +1574,7 @@ static const AVOption options[] = {
     { "adaptation_sets", "Adaptation sets. Syntax: id=0,streams=0,1,2 id=1,streams=3,4 and so on", OFFSET(adaptation_sets), AV_OPT_TYPE_STRING, { 0 }, 0, 0, AV_OPT_FLAG_ENCODING_PARAM },
     { "window_size", "number of segments kept in the manifest", OFFSET(window_size), AV_OPT_TYPE_INT, { .i64 = 0 }, 0, INT_MAX, E },
     { "extra_window_size", "number of segments kept outside of the manifest before removing from disk", OFFSET(extra_window_size), AV_OPT_TYPE_INT, { .i64 = 5 }, 0, INT_MAX, E },
+    { "min_target_duration", "set minmal target duration in seconds", OFFSET(minimal_target_duration), AV_OPT_TYPE_FLOAT, {.dbl = 0}, 0, FLT_MAX, E},
 #if FF_API_DASH_MIN_SEG_DURATION
     { "min_seg_duration", "minimum segment duration (in microseconds) (will be deprecated)", OFFSET(min_seg_duration), AV_OPT_TYPE_INT, { .i64 = 5000000 }, 0, INT_MAX, E },
 #endif

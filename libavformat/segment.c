@@ -121,6 +121,8 @@ typedef struct SegmentContext {
     int use_rename;
     char temp_list_filename[1024];
 
+    float minimal_target_duration;
+
     SegmentListEntry cur_entry;
     SegmentListEntry *segment_list_entries;
     SegmentListEntry *segment_list_entries_end;
@@ -289,7 +291,7 @@ static int segment_list_open(AVFormatContext *s)
 
     if (seg->list_type == LIST_TYPE_M3U8 && seg->segment_list_entries) {
         SegmentListEntry *entry;
-        double max_duration = 0;
+        double max_duration = seg->minimal_target_duration;
 
         avio_printf(seg->list_pb, "#EXTM3U\n");
         avio_printf(seg->list_pb, "#EXT-X-VERSION:3\n");
@@ -1061,6 +1063,7 @@ static const AVOption options[] = {
     { "reset_timestamps", "reset timestamps at the beginning of each segment", OFFSET(reset_timestamps), AV_OPT_TYPE_BOOL, {.i64 = 0}, 0, 1, E },
     { "initial_offset", "set initial timestamp offset", OFFSET(initial_offset), AV_OPT_TYPE_DURATION, {.i64 = 0}, -INT64_MAX, INT64_MAX, E },
     { "write_empty_segments", "allow writing empty 'filler' segments", OFFSET(write_empty), AV_OPT_TYPE_BOOL, {.i64 = 0}, 0, 1, E },
+    { "min_target_duration", "set minmal target duration in seconds", OFFSET(minimal_target_duration), AV_OPT_TYPE_FLOAT, {.dbl = 0}, 0, FLT_MAX, E},
     { NULL },
 };
 

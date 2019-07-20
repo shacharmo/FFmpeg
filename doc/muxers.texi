@@ -236,6 +236,10 @@ use cases.
 Set the maximum number of segments kept in the manifest.
 @item -extra_window_size @var{size}
 Set the maximum number of segments kept outside of the manifest before removing from disk.
+@item -min_target_duration @var{seconds}.
+Set minimal target duration to output. Default value is 0.
+This is mainly used to avoid 0 target duration which causes some players to stop.
+Longer segments will still update the target duration.
 @item -remove_at_exit @var{remove}
 Enable (1) or disable (0) removal of all segments when finished.
 @item -use_template @var{template}
@@ -539,6 +543,11 @@ at duration equal to @code{hls_time}
 @item hls_time @var{seconds}
 Set the target segment length in seconds. Default value is 2.
 Segment will be cut on the next key frame after this time has passed.
+
+@item hls_min_target_duration @var{seconds}
+Set minimal target duration to output. Default value is 0.
+This is mainly used to avoid 0 target duration which causes some players to stop.
+Longer segments will still update the target duration.
 
 @item hls_list_size @var{size}
 Set the maximum number of playlist entries. If set to 0 the list file
@@ -1886,6 +1895,11 @@ argument must be a time duration specification, and defaults to 0.
 If enabled, write an empty segment if there are no packets during the period a
 segment would usually span. Otherwise, the segment will be filled with the next
 packet written. Defaults to @code{0}.
+
+@item -min_target_duration @var{seconds}.
+Set minimal target duration to output. Default value is 0.
+This is mainly used to avoid 0 target duration which causes some players to stop.
+Longer segments will still update the target duration.
 @end table
 
 Make sure to require a closed GOP when encoding and to set the GOP

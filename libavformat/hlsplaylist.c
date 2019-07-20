@@ -72,7 +72,7 @@ void ff_hls_write_stream_info(AVStream *st, AVIOContext *out,
 }
 
 void ff_hls_write_playlist_header(AVIOContext *out, int version, int allowcache,
-                                  int target_duration, int64_t sequence,
+                                  float target_duration, int64_t sequence,
                                   uint32_t playlist_type) {
     if (!out)
         return;

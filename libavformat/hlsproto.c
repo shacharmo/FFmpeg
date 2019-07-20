@@ -131,7 +131,7 @@ static int parse_playlist(URLContext *h, const char *url)
                                &info);
             bandwidth = atoi(info.bandwidth);
         } else if (av_strstart(line, "#EXT-X-TARGETDURATION:", &ptr)) {
-            s->target_duration = atoi(ptr) * AV_TIME_BASE;
+            s->target_duration = (int64_t)llrint(atof(ptr) * AV_TIME_BASE);
         } else if (av_strstart(line, "#EXT-X-MEDIA-SEQUENCE:", &ptr)) {
             s->start_seq_no = atoi(ptr);
         } else if (av_strstart(line, "#EXT-X-ENDLIST", &ptr)) {
