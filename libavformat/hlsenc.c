@@ -724,6 +724,7 @@ static int hls_mux_init(AVFormatContext *s, VariantStream *vs)
             st->codecpar->codec_tag = 0;
         }
 
+        st->id = s->streams[i]->id;
         st->sample_aspect_ratio = vs->streams[i]->sample_aspect_ratio;
         st->time_base = vs->streams[i]->time_base;
         av_dict_copy(&st->metadata, vs->streams[i]->metadata, 0);
